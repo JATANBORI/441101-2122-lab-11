@@ -1,0 +1,94 @@
+﻿using System;
+using System.IO;
+
+namespace L11._2_LoadingDataFromFiles
+{
+    class Program
+    {
+        static int GetFileSum(string pFile)
+        {
+            int sum = 0;
+            StreamReader reader = null;
+
+            try
+            {
+                reader = new StreamReader(pFile);
+
+                string line = reader.ReadLine();
+                string[] values = line.Split(',');
+
+                foreach (string value in values)
+                {
+                    sum += int.Parse(value);
+                }
+
+                reader.Close();
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine(pFile + " does not exists.");
+                throw ex;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine("File format incorrect.");
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Something went wrong.");
+                throw ex;
+            }
+            finally
+            {
+                if (reader != null)
+                {
+                    reader.Close();
+                }
+            }
+            
+
+            return sum;
+        }
+
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Output The Sum");
+            Console.WriteLine("Enter 1 to read a well formatted file");
+            Console.WriteLine("Enter 2 to read a badly formatted file");
+            Console.WriteLine("Enter 3 to read a file that does not exist");
+
+            int selection = int.Parse(Console.ReadLine());
+
+            string filename = "";
+
+            switch (selection)
+            {
+                case 1:
+                    filename = "WellFormattedFile.txt";
+                    break;
+                case 2:
+                    filename = "BadlyFormattedFile.txt";
+                    break;
+                case 3:
+                    filename = "FileThatDoesntExist.txt";
+                    break;
+                default:
+                    Console.WriteLine("Invalid Selection");
+                    break;
+            }
+
+            try
+            {
+                int sum = GetFileSum(filename);
+                Console.WriteLine("sum is " + sum);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message + " The program will now terminate.");
+            }
+            
+            
+        }
+    }
+}
